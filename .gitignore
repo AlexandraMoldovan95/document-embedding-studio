@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node / Next.js
+node_modules/
+.next/
+tsconfig.tsbuildinfo
+
+# Environment — commit only the *.example files
+.env
+.env.local
+
+# Persistent vector storage
+data/
+backend/data/
+
+# OS
+.DS_Store

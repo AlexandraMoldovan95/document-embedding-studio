@@ -1,0 +1,29 @@
+# Full local stack. ChromaDB stays embedded inside the backend process and
+# persists to a named volume, so there is no separate database container to run.
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      CORS_ORIGINS: http://localhost:3000
+      CHROMA_DIR: /data/chroma
+      EMBEDDING_WARMUP: "true"
+    volumes:
+      - chroma-data:/data/chroma
+      # Model weights download once, then live here across rebuilds.
+      - hf-cache:/root/.cache/huggingface
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  chroma-data:
+  hf-cache:
