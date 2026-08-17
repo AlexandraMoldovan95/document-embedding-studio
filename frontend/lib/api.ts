@@ -15,6 +15,9 @@ import type {
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+/** Same host as API_URL, just with the ws(s):// scheme, for the live container panel. */
+export const WS_URL = API_URL.replace(/^http/, "ws");
+
 /** An error the backend described in its `{ code, message }` envelope. */
 export class ApiError extends Error {
   readonly code: string;

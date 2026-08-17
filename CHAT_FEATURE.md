@@ -25,7 +25,7 @@ whatever collection is selected — the "Generation" half of RAG, on top of the
   (cleared when you close the tab) purely so you don't retype it between
   questions — it is never written to disk, logged, or stored in ChromaDB.
 - Model field is optional — leave it blank to use a sensible default
-  (`gpt-4o-mini`, `claude-3-5-sonnet-latest`, or `gemini-2.0-flash`), or type
+  (`gpt-4o-mini`, `claude-3-5-sonnet-latest`, or `gemini-3.6-flash`), or type
   a specific model name your account has access to.
 
 ## What changed under the hood

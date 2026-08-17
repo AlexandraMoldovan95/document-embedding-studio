@@ -11,7 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api import chat, collections, ingestion, search
+from app.api import chat, collections, ingestion, monitor, search
 from app.api.deps import SettingsDep
 from app.core.config import get_settings
 from app.core.errors import StudioError
@@ -58,6 +58,7 @@ app.include_router(ingestion.router)
 app.include_router(collections.router)
 app.include_router(search.router)
 app.include_router(chat.router)
+app.include_router(monitor.router)
 
 
 @app.exception_handler(StudioError)

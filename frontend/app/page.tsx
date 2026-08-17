@@ -5,6 +5,7 @@ import { ChatPanel } from "@/components/ChatPanel";
 import { ChunkPreview } from "@/components/ChunkPreview";
 import { ChunkSettings, type ChunkSettingsValue } from "@/components/ChunkSettings";
 import { CollectionSelector } from "@/components/CollectionSelector";
+import { ContainerMonitor } from "@/components/ContainerMonitor";
 import { FileDropzone } from "@/components/FileDropzone";
 import { FileList } from "@/components/FileList";
 import {
@@ -526,6 +527,15 @@ export default function Home() {
             hint="Bring your own API key — the assistant answers in plain language, grounded in this collection."
           />
           <ChatPanel collectionName={collection} chunkCount={selectedChunkCount} />
+        </Panel>
+
+        {/* Container status (live via WebSocket) -------------------------- */}
+        <Panel>
+          <SectionHeading
+            title="Container status"
+            hint="Live CPU and memory for this app's own Docker containers, pushed over a WebSocket."
+          />
+          <ContainerMonitor />
         </Panel>
 
         <p className="pb-4 text-center text-xs text-ink-400">

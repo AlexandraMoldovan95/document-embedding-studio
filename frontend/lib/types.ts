@@ -133,6 +133,26 @@ export interface StudioConfig {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Container monitor (live, via WebSocket)                                    */
+/* -------------------------------------------------------------------------- */
+
+export interface ContainerSnapshot {
+  id: string;
+  name: string;
+  image: string;
+  status: string;
+  cpu_percent: number;
+  memory_used_mb: number;
+  memory_limit_mb: number;
+}
+
+export interface ContainerMonitorMessage {
+  ok: boolean;
+  containers: ContainerSnapshot[];
+  error: string | null;
+}
+
+/* -------------------------------------------------------------------------- */
 /* Chat (BYOK)                                                                 */
 /* -------------------------------------------------------------------------- */
 

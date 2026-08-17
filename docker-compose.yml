@@ -13,6 +13,17 @@ services:
       - chroma-data:/data/chroma
       # Model weights download once, then live here across rebuilds.
       - hf-cache:/root/.cache/huggingface
+      # Read-only bind mount for the container status panel (WS
+      # /ws/containers). See the security note at the top of
+      # backend/app/services/docker_monitor.py before changing this — the
+      # ":ro" flag only makes the socket *file* unwritable from inside the
+      # container, it does NOT restrict what the Docker API itself allows
+      # over that socket. Never expose this compose file's containers to
+      # anything beyond your own machine.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      studio.monitor: "true"
+      studio.role: "backend"
 
   frontend:
     build:
@@ -23,6 +34,9 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    labels:
+      studio.monitor: "true"
+      studio.role: "frontend"
 
 volumes:
   chroma-data:
