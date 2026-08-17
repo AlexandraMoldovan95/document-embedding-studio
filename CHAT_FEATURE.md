@@ -49,7 +49,9 @@ whatever collection is selected — the "Generation" half of RAG, on top of the
 - `tests/test_chat.py` — new, 6 tests. The outbound LLM call is stubbed so
   the whole suite still runs offline with zero API keys or network access,
   same philosophy as the hashing embedding provider used elsewhere in the
-  tests. All 69 tests (63 original + 6 new) pass.
+  tests. All 69 chat-related tests passed at the time this feature was
+  added (63 original + 6 new); the full suite has since grown to 71 with
+  the container monitor feature — see `CONTAINER_MONITOR_FEATURE.md`.
 
 **Frontend**
 - `components/ChatPanel.tsx` — new. Provider selector, API key field (with
