@@ -77,7 +77,7 @@ backend/
     models/schemas.py       Pydantic request/response models
     core/config.py           settings from environment / .env
     core/errors.py           safe, typed domain errors
-  tests/                    71 tests: chunking, loaders, full API, chat, monitor
+  tests/                    70 tests: chunking, loaders, full API, chat, monitor
   pyproject.toml
   .env.example
   Dockerfile
@@ -270,7 +270,7 @@ Errors always arrive as `{ "success": false, "code": "...", "message": "..." }`.
 ```bash
 # Backend
 cd backend
-pytest                       # 71 tests — chunking, loaders, ingest/search/chat/monitor API
+pytest                       # 70 tests — chunking, loaders, ingest/search/chat/monitor API
 uvicorn app.main:app --reload
 
 # Frontend

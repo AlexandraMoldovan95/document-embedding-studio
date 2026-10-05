@@ -49,8 +49,8 @@ whatever collection is selected — the "Generation" half of RAG, on top of the
 - `tests/test_chat.py` — new, 6 tests. The outbound LLM call is stubbed so
   the whole suite still runs offline with zero API keys or network access,
   same philosophy as the hashing embedding provider used elsewhere in the
-  tests. All 69 chat-related tests passed at the time this feature was
-  added (63 original + 6 new); the full suite has since grown to 71 with
+  tests. All 68 chat-related tests passed at the time this feature was
+  added (62 original + 6 new); the full suite has since grown to 70 with
   the container monitor feature — see `CONTAINER_MONITOR_FEATURE.md`.
 
 **Frontend**
@@ -66,7 +66,7 @@ whatever collection is selected — the "Generation" half of RAG, on top of the
 
 ## Verified before delivery
 
-Ran for real, not just written: `pip install -e ".[dev]"`, `pytest` (69/69
+Ran for real, not just written: `pip install -e ".[dev]"`, `pytest` (68/68
 pass), booted the server and hit `/api/chat` directly, `npm install`,
 `npx tsc --noEmit` (clean), `npm run build` (compiles, production build
 succeeds). Only thing not testable in this environment: a real answer from

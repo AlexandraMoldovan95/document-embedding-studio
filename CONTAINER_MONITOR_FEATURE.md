@@ -66,7 +66,7 @@ machine.
 - `pyproject.toml` — added `docker>=7.0`.
 - `tests/test_monitor.py` — new, 2 tests. `snapshot_containers` is
   monkeypatched, so these run with no real Docker socket needed — same
-  approach as the LLM provider tests. All 71 tests (69 + 2 new) pass.
+  approach as the LLM provider tests. All 70 tests (68 + 2 new) pass.
 - `docker-compose.yml` — added the `studio.monitor` / `studio.role` labels
   to both services, and the read-only Docker socket bind mount on the
   backend only (the frontend doesn't need it).
@@ -82,7 +82,7 @@ machine.
 
 ## Verified before delivery
 
-`pip install -e ".[dev]"`, `pytest` (71/71 pass), `npm install`,
+`pip install -e ".[dev]"`, `pytest` (70/70 pass), `npm install`,
 `npx tsc --noEmit` (clean), `npm run build` (production build succeeds).
 Not testable in this sandbox: a real Docker socket connection (this
 environment has no Docker daemon) — that part you'll confirm by running
