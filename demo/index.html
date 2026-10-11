@@ -226,7 +226,7 @@
     <div class="wrap">
       <div class="eyebrow">Static walkthrough · sample data</div>
       <h1>Document Embedding Studio - Demo</h1>
-      <p class="detail-pitch">The real app runs a FastAPI + Next.js + Docker backend with a local embedding model and a persistent ChromaDB - nothing a free static host can run. This page walks through the same pipeline with one sample document and fixed data, so you can see how it behaves without spinning up the backend yourself.</p>
+      <p class="detail-pitch">A hands-on walkthrough of how the real Document Embedding Studio works, using one sample document and fixed, pre-written results - nothing to install, nothing to set up. Upload the document, watch it get split into pieces and indexed, then search it and ask it questions, the same four steps as the real app, just with sample data standing in for the real processing (details on that further down the page).</p>
 
       <div class="demo-banner">
         🧪 <span><strong>Static demo</strong> - sample document, fixed chunks, no backend running and nothing uploaded anywhere. The search and the assistant below really read the sample text you see on this page, they just don't call a real embedding model or an LLM.</span>
@@ -295,7 +295,7 @@
 
       <div class="demo-step">
         <h2><span class="demo-step-num">4</span> Ask the assistant</h2>
-        <p class="step-hint">The real app sends the matched chunks plus your question to your own OpenAI / Anthropic / Gemini key (BYOK) and the model writes the answer. Here, the answer below is assembled directly from the matched chunk text, not written by a model.</p>
+        <p class="step-hint">The real app sends the matched chunks plus your question to an AI model, using your own OpenAI / Anthropic / Gemini key - you bring your own key, so nothing is billed to me - and the model writes the answer. Here, the answer below is assembled directly from the matched chunk text, not written by a model.</p>
         <div class="query-chips" id="chat-chips"></div>
         <div class="search-row">
           <input type="text" id="chat-input" placeholder="e.g. what's the difference between 401 and 403?">
@@ -306,6 +306,10 @@
           <div id="answer-text"></div>
         </div>
       </div>
+
+      <p class="step-hint" style="text-align:center; margin: 32px 0 0;">
+        <strong>For the curious:</strong> the real app behind this walkthrough runs on FastAPI (Python) and Next.js, with a local embedding model and a persistent ChromaDB vector database, all in Docker - infrastructure a free static host like this one can't run, which is why this page exists as a hands-on stand-in.
+      </p>
 
     </div>
   </section>
