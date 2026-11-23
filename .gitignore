@@ -22,3 +22,6 @@ backend/data/
 
 # OS
 .DS_Store
+
+# Netlify CLI link state for the demo/ static site - never shared, machine-specific
+.netlify/

@@ -284,6 +284,26 @@ The chat and container-monitor tests mock the outbound LLM call and the
 Docker socket respectively, so the full suite runs offline — no real API
 keys and no running Docker daemon required to verify the code.
 
+## Browser demo (static, no backend)
+
+`demo/` is a separate, static recreation of the four-step pipeline (upload →
+chunk → embed → search → ask) for anyone who wants to see it work without
+installing anything. It has three sample documents, all written specifically
+for this demo (not sourced from any real third-party file), each pre-chunked
+with real word-overlap search — no network calls, no real embedding model, no
+real LLM.
+
+It's deployed separately from the main app, at
+[document-embedding-studio-demo-88c9c6.netlify.app](https://document-embedding-studio-demo-88c9c6.netlify.app/),
+linked to Netlify via the CLI directly from inside `demo/` (not through git).
+**Pushing to GitHub does *not* redeploy it.** After changing anything under
+`demo/`, deploy it by hand:
+
+```bash
+cd demo
+netlify deploy --prod   # first time: run `netlify link` once beforehand
+```
+
 ## Known limitations
 
 - Re-ingesting the same file creates a new document ID rather than replacing
