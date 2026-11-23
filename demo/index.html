@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document Embedding Studio — Demo</title>
-<meta name="description" content="A static walkthrough of the Document Embedding Studio pipeline - upload, chunk, embed, search and ask - with sample data, no backend running.">
+<meta name="description" content="A static walkthrough of the Document Embedding Studio pipeline - upload, chunk, embed, search and ask - with three sample documents, no backend running.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://document-embedding-studio-demo-88c9c6.netlify.app/">
 <meta property="og:title" content="Document Embedding Studio — Demo">
-<meta property="og:description" content="A static walkthrough of the Document Embedding Studio pipeline - upload, chunk, embed, search and ask - with sample data, no backend running.">
+<meta property="og:description" content="A static walkthrough of the Document Embedding Studio pipeline - upload, chunk, embed, search and ask - with three sample documents, no backend running.">
 <meta property="og:image" content="https://alexandra-moldovan.netlify.app/images/document-embedding-studio-og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Document Embedding Studio — Demo">
-<meta name="twitter:description" content="A static walkthrough of the Document Embedding Studio pipeline - upload, chunk, embed, search and ask - with sample data, no backend running.">
+<meta name="twitter:description" content="A static walkthrough of the Document Embedding Studio pipeline - upload, chunk, embed, search and ask - with three sample documents, no backend running.">
 <meta name="twitter:image" content="https://alexandra-moldovan.netlify.app/images/document-embedding-studio-og.jpg">
 
 <link rel="stylesheet" href="styles.css">
@@ -83,6 +83,23 @@
     flex-shrink: 0;
   }
   .demo-step p.step-hint { color: var(--text-muted); margin: 0 0 20px; font-size: 0.92rem; }
+
+  .doc-switcher { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .doc-switch-btn {
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+  }
+  .doc-switch-btn .doc-switch-sub { display: block; font-weight: 400; color: var(--text-muted); font-size: 0.78rem; margin-top: 2px; }
+  .doc-switch-btn:hover { border-color: var(--accent); }
+  .doc-switch-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
+  .doc-switch-btn.active .doc-switch-sub { color: var(--accent-ink); opacity: 0.8; }
 
   .doc-chip {
     display: flex;
@@ -238,41 +255,30 @@
     <div class="wrap">
       <div class="eyebrow">Static walkthrough · sample data</div>
       <h1>Document Embedding Studio - Demo</h1>
-      <p class="detail-pitch">A hands-on walkthrough of how the real Document Embedding Studio works, using one sample document and fixed, pre-written results - nothing to install, nothing to set up. Upload the document, watch it get split into pieces and indexed, then search it and ask it questions, the same four steps as the real app, just with sample data standing in for the real processing (details on that further down the page).</p>
+      <p class="detail-pitch">A hands-on walkthrough of how the real Document Embedding Studio works, using one of three sample documents and fixed, pre-written results - nothing to install, nothing to set up. Pick a document, watch it get split into pieces and indexed, then search it and ask it questions, the same four steps as the real app, just with sample data standing in for the real processing (details on that further down the page).</p>
 
       <div class="demo-banner">
-        🧪 <span><strong>Static demo</strong> - sample document, fixed chunks, no backend running and nothing uploaded anywhere. The search and the assistant below really read the sample text you see on this page, they just don't call a real embedding model or an LLM.</span>
+        🧪 <span><strong>Static demo</strong> - three sample documents, fixed chunks, no backend running and nothing uploaded anywhere. All three are written for this demo (not real-world files), so there's nothing to attribute and nothing borrowed. The search and the assistant below really read the sample text you pick, they just don't call a real embedding model or an LLM.</span>
       </div>
 
       <div class="demo-step">
         <h2><span class="demo-step-num">1</span> Upload a document</h2>
-        <p class="step-hint">In the real app you'd drop a PDF, DOCX, Markdown or text file. Here's one sample document, already queued.</p>
+        <p class="step-hint">In the real app you'd drop a PDF, DOCX, Markdown or text file. Here are three sample documents already queued - pick one, short or long, to send through the pipeline.</p>
+
+        <div class="doc-switcher" id="doc-switcher"></div>
 
         <div class="doc-chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M14 3.5V8h4"/></svg>
           <div class="doc-chip-info">
-            <div class="doc-name">api-error-handling-guide.md</div>
-            <div class="doc-meta">2.1 KB · plain text · 6 paragraphs</div>
+            <div class="doc-name" id="doc-name"></div>
+            <div class="doc-meta" id="doc-meta"></div>
           </div>
           <button type="button" class="btn btn-accent" id="process-btn">Process this document →</button>
         </div>
 
         <details class="doc-preview">
           <summary>Preview document text</summary>
-          <div class="doc-preview-body">
-            <h4>Rate limiting</h4>
-            <p>Rate limiting protects the API from being overwhelmed by too many requests in a short window. When a client exceeds its allotted rate, the API returns a 429 Too Many Requests status code, along with a Retry-After header telling the client how many seconds to wait. Clients should treat 429 as a signal to back off, not as a permanent failure.</p>
-            <h4>Retry strategy</h4>
-            <p>A well-behaved client retries the same request later rather than giving up or hammering the endpoint again immediately. The recommended strategy is exponential backoff with jitter: double the wait time after each failed attempt, and add a small random delay so that many clients retrying at once don't all collide on the same retry schedule.</p>
-            <h4>Authentication errors: 401 vs 403</h4>
-            <p>Authentication errors come in two main flavors that are often confused. A 401 Unauthorized means the request has no valid credentials at all - the API key is missing, malformed, or expired. A 403 Forbidden means the credentials are valid, but the authenticated caller doesn't have permission to perform this specific action.</p>
-            <h4>Idempotency keys</h4>
-            <p>Idempotency keys let a client safely retry a request that may have already succeeded, without causing it twice - for example, a payment that timed out before the response arrived. The client generates a unique key per logical operation and sends it in a header; the server stores the result of the first request under that key.</p>
-            <h4>Timeouts</h4>
-            <p>Timeouts need a value on both sides of a request. A client-side timeout that's too short causes retries of requests that were actually about to succeed, wasting capacity on both ends. As a rule of thumb, the client's timeout should be a little longer than the server's own maximum processing time for that endpoint.</p>
-            <h4>Error response shape</h4>
-            <p>Every error response follows the same JSON shape across the API: a machine-readable code field for programmatic branching, a human-readable message meant for logs and debugging, and an optional details object with field-specific validation errors. Keeping this shape consistent means client code can handle errors generically in one place.</p>
-          </div>
+          <div class="doc-preview-body" id="doc-preview-body"></div>
         </details>
 
         <div class="pipeline-track" id="pipeline-track">
@@ -283,9 +289,7 @@
           <div class="pipeline-stage" data-stage="store">Store in ChromaDB</div>
         </div>
 
-        <div class="pipeline-summary" id="pipeline-summary">
-          <strong>Done.</strong> 6 chunks created (≈120 tokens each, 20-token overlap) · 384-dim embeddings (sample vectors, not computed by a real model) · stored in collection <code>demo-docs</code>.
-        </div>
+        <div class="pipeline-summary" id="pipeline-summary"></div>
       </div>
 
       <div class="demo-step">
@@ -320,7 +324,7 @@
       </div>
 
       <p class="step-hint" style="text-align:center; margin: 32px 0 0;">
-        <strong>For the curious:</strong> the real app behind this walkthrough runs on FastAPI (Python) and Next.js, with a local embedding model and a persistent ChromaDB vector database, all in Docker - infrastructure a free static host like this one can't run, which is why this page exists as a hands-on stand-in.
+        <strong>For the curious:</strong> the real app behind this walkthrough runs on FastAPI (Python) and Next.js, with a local embedding model and a persistent ChromaDB vector database, all in Docker - infrastructure a free static host like this one can't run, which is why this page exists as a hands-on stand-in. All three sample documents above were written specifically for this demo, not sourced from anyone else's material.
       </p>
 
     </div>
@@ -336,20 +340,94 @@
 <script>
 // ============================================
 // Document Embedding Studio - static demo
-// Sample document, chunked once (hardcoded below), searched by real
-// word-overlap scoring against what the visitor types. No network calls,
-// no real embedding model, no real LLM - everything here runs locally in
-// the page and is clearly labelled as a demo.
+// Three sample documents (all written for this demo), each pre-chunked
+// (hardcoded below), searched by real word-overlap scoring against what
+// the visitor types. No network calls, no real embedding model, no real
+// LLM - everything here runs locally in the page and is clearly labelled
+// as a demo.
 // ============================================
 
-const CHUNKS = [
-  "Rate limiting protects the API from being overwhelmed by too many requests in a short window. When a client exceeds its allotted rate, the API returns a 429 Too Many Requests status code, along with a Retry-After header telling the client how many seconds to wait. Clients should treat 429 as a signal to back off, not as a permanent failure.",
-  "A well-behaved client retries the same request later rather than giving up or hammering the endpoint again immediately. The recommended strategy is exponential backoff with jitter: double the wait time after each failed attempt, and add a small random delay so that many clients retrying at once don't all collide on the same retry schedule.",
-  "Authentication errors come in two main flavors that are often confused. A 401 Unauthorized means the request has no valid credentials at all - the API key is missing, malformed, or expired. A 403 Forbidden means the credentials are valid, but the authenticated caller doesn't have permission to perform this specific action.",
-  "Idempotency keys let a client safely retry a request that may have already succeeded, without causing it twice - for example, a payment that timed out before the response arrived. The client generates a unique key per logical operation and sends it in a header; the server stores the result of the first request under that key.",
-  "Timeouts need a value on both sides of a request. A client-side timeout that's too short causes retries of requests that were actually about to succeed, wasting capacity on both ends. As a rule of thumb, the client's timeout should be a little longer than the server's own maximum processing time for that endpoint.",
-  "Every error response follows the same JSON shape across the API: a machine-readable code field for programmatic branching, a human-readable message meant for logs and debugging, and an optional details object with field-specific validation errors. Keeping this shape consistent means client code can handle errors generically in one place.",
-];
+const DOCUMENTS = {
+  api: {
+    label: "API error-handling guide",
+    filename: "api-error-handling-guide.md",
+    meta: "2.1 KB · plain text · 6 sections",
+    sections: [
+      { heading: "Rate limiting", text: "Rate limiting protects the API from being overwhelmed by too many requests in a short window. When a client exceeds its allotted rate, the API returns a 429 Too Many Requests status code, along with a Retry-After header telling the client how many seconds to wait. Clients should treat 429 as a signal to back off, not as a permanent failure." },
+      { heading: "Retry strategy", text: "A well-behaved client retries the same request later rather than giving up or hammering the endpoint again immediately. The recommended strategy is exponential backoff with jitter: double the wait time after each failed attempt, and add a small random delay so that many clients retrying at once don't all collide on the same retry schedule." },
+      { heading: "Authentication errors: 401 vs 403", text: "Authentication errors come in two main flavors that are often confused. A 401 Unauthorized means the request has no valid credentials at all - the API key is missing, malformed, or expired. A 403 Forbidden means the credentials are valid, but the authenticated caller doesn't have permission to perform this specific action." },
+      { heading: "Idempotency keys", text: "Idempotency keys let a client safely retry a request that may have already succeeded, without causing it twice - for example, a payment that timed out before the response arrived. The client generates a unique key per logical operation and sends it in a header; the server stores the result of the first request under that key." },
+      { heading: "Timeouts", text: "Timeouts need a value on both sides of a request. A client-side timeout that's too short causes retries of requests that were actually about to succeed, wasting capacity on both ends. As a rule of thumb, the client's timeout should be a little longer than the server's own maximum processing time for that endpoint." },
+      { heading: "Error response shape", text: "Every error response follows the same JSON shape across the API: a machine-readable code field for programmatic branching, a human-readable message meant for logs and debugging, and an optional details object with field-specific validation errors. Keeping this shape consistent means client code can handle errors generically in one place." },
+    ],
+    notFoundHint: "rate limits, auth errors, idempotency, timeouts, or error format",
+    searchSuggestions: [
+      "how should a client handle a 429?",
+      "difference between 401 and 403",
+      "how do idempotency keys work?",
+    ],
+    chatSuggestions: [
+      "what's the difference between 401 and 403?",
+      "what should a client do about timeouts?",
+      "what does every error response look like?",
+    ],
+  },
+  pantry: {
+    label: "Pantry & meal-prep guide",
+    filename: "pantry-meal-prep-guide.md",
+    meta: "2.3 KB · plain text · 6 sections",
+    sections: [
+      { heading: "Building a basic pantry", text: "A well-stocked pantry starts with a handful of staples that combine into dozens of meals: rice or pasta, canned beans and tomatoes, a neutral oil, onions and garlic, a few dried spices, and something acidic like vinegar or lemon juice. Buying these in bulk when they're on sale and rotating older stock to the front keeps the pantry useful without becoming a stockpile that goes stale." },
+      { heading: "Meal-prepping for the week", text: "Meal prep works best when it is built around one or two cooked bases - a pot of grains and a batch of roasted vegetables or protein - that get recombined into different meals through the week, rather than five identical containers. Cooking the base on a single day and assembling the rest just before eating keeps textures fresher than prepping fully finished meals days in advance." },
+      { heading: "Food safety basics", text: "Cooked food left at room temperature should go into the fridge within two hours, or one hour in hot weather, since bacteria multiply fastest between 4°C and 60°C. Leftovers are generally safe for three to four days in the fridge; past that, freezing extends their life safely for months, as long as they were cooled and stored properly to begin with." },
+      { heading: "Reading a nutrition label", text: "The serving size at the top of a nutrition label controls every other number on it, so it is worth checking before comparing products - a package that looks lower in calories or sugar may simply define a smaller serving. The %DV (percent daily value) column is a faster way to judge a nutrient than the raw gram amount, since it is already scaled to a standard daily diet." },
+      { heading: "Budget-friendly protein swaps", text: "Canned fish, eggs, lentils, and frozen chicken thighs typically cost less per gram of protein than fresh beef, pork chops, or boneless chicken breast, while lasting longer in the pantry or freezer. Swapping even two or three meals a week toward these options can noticeably lower a grocery bill without reducing how much protein a meal actually provides." },
+      { heading: "Freezing and reheating safely", text: "Most cooked meals freeze well in flat, labeled portions that thaw faster and stack more efficiently than deep containers. Thawing in the fridge overnight is safest; reheating should bring the food to a full simmer or 74°C internal temperature, not just lukewarm, since that is the point where bacteria that survived freezing can regrow if the food stays only mildly warm." },
+    ],
+    notFoundHint: "pantry basics, meal prep, food safety, nutrition labels, protein swaps, or freezing",
+    searchSuggestions: [
+      "how long are leftovers safe in the fridge?",
+      "what does %DV mean on a nutrition label?",
+      "cheaper ways to get protein",
+    ],
+    chatSuggestions: [
+      "how should I thaw and reheat frozen food safely?",
+      "what pantry staples should I keep stocked?",
+      "how does meal prep actually work?",
+    ],
+  },
+  sysadmin: {
+    label: "Linux admin quick reference",
+    filename: "linux-admin-quick-reference.md",
+    meta: "3.6 KB · plain text · 9 sections",
+    sections: [
+      { heading: "File permissions & chmod", text: "Every file on a Linux system carries three permission sets - owner, group, and everyone else - each allowing read, write, and execute independently. chmod changes these either numerically (chmod 644 file sets owner to read-write, everyone else to read-only) or symbolically (chmod g+w file adds write access for the group). Directories use the execute bit differently than files: it controls whether a user can enter the directory at all, not whether they can run it." },
+      { heading: "Process management & signals", text: "ps and top show what is currently running, but killing a process cleanly means sending it a signal, not just removing it. SIGTERM (the default for kill) asks a process to shut down gracefully, giving it a chance to save state and close files; SIGKILL forces an immediate stop with no cleanup, and should be a last resort when a process stops responding to SIGTERM entirely." },
+      { heading: "systemd services", text: "systemd manages most modern Linux services through unit files that describe what to run, when to start it, and what it depends on. systemctl start/stop/restart controls a service immediately, while systemctl enable makes that choice persist across reboots. journalctl -u <service> pulls just that service's logs out of the system-wide journal, usually the fastest way to find out why a service failed to start." },
+      { heading: "Log files & journalctl", text: "Traditional Linux logs live as plain text under /var/log, readable with tail -f for a live view, but most current distributions also keep a structured, indexed journal that journalctl queries directly. journalctl -b shows logs from the current boot only, and --since '1 hour ago' narrows a long journal to a recent window - both far faster than scrolling through a raw log file by hand." },
+      { heading: "Cron scheduling", text: "A crontab line has five time fields - minute, hour, day of month, month, day of week - followed by the command to run, with * meaning 'every value' in that field. A job scheduled with cron runs with a minimal environment and no interactive shell, which is the most common reason a script that works fine when run by hand fails silently under cron - usually a missing PATH or an assumed working directory." },
+      { heading: "Disk usage: df & du", text: "df -h reports free space per mounted filesystem, which answers 'is this disk full' but not 'what is filling it.' du -sh * run inside a directory sums up the size of each item inside it, and sorting that output is usually the fastest way to find the folder actually responsible for filling a disk, rather than guessing from the top down." },
+      { heading: "SSH key-based auth", text: "Key-based SSH login replaces a password with a key pair: a private key that stays on the client and a public key copied to the server's ~/.ssh/authorized_keys file. Because the private key never travels over the network, this is both more secure than password auth and immune to brute-force login attempts - disabling password authentication entirely in sshd_config is standard practice once key-based login is confirmed working." },
+      { heading: "Package management basics", text: "Debian-based distributions use apt (install, remove, update, upgrade), while Red Hat-based ones use dnf or the older yum - both resolve dependencies automatically from a repository index that needs refreshing (apt update) before new packages become visible. Mixing manual installs outside the package manager with its own installs is a common source of version conflicts, since the package manager has no record of what was installed by hand." },
+      { heading: "Environment variables & shells", text: "Environment variables like PATH and HOME are inherited by every process a shell starts, which is why a variable exported in one terminal does not appear in another already-open one. Changes meant to persist go into a shell's startup file (.bashrc, .zshrc, or similar) rather than being exported directly in a terminal, since that file re-runs every time a new shell starts, while a direct export only affects the current session." },
+    ],
+    notFoundHint: "file permissions, processes, systemd, logs, cron, disk usage, SSH keys, or packages",
+    searchSuggestions: [
+      "difference between SIGTERM and SIGKILL",
+      "how do I see logs for a systemd service?",
+      "why does my cron job fail silently?",
+    ],
+    chatSuggestions: [
+      "how does cron scheduling work?",
+      "how is SSH key auth more secure than a password?",
+      "how do I find what's filling up my disk?",
+    ],
+  },
+};
+
+const DOC_ORDER = ["api", "pantry", "sysadmin"];
+let currentDocId = DOC_ORDER[0];
+let CHUNKS = [];
 
 const STOPWORDS = new Set(["a","an","the","is","are","was","were","be","been","of","to","in","on","for","and","or","with","that","this","it","its","as","at","by","from","than","then","not","no","do","does","did","how","what","when","where","why","which","should","would","could","can","i","you","your","my","me","so","but","if","into","over","under","per","own","same","also","very","more","most","any","all","each"]);
 
@@ -375,6 +453,53 @@ function scoreChunks(query) {
     .filter((r) => r.hits > 0)
     .sort((a, b) => b.score - a.score || b.hits - a.hits);
 }
+
+// ---------- Document switcher ----------
+const docSwitcherEl = document.getElementById("doc-switcher");
+const docNameEl = document.getElementById("doc-name");
+const docMetaEl = document.getElementById("doc-meta");
+const docPreviewBodyEl = document.getElementById("doc-preview-body");
+
+function renderDocSwitcher() {
+  docSwitcherEl.innerHTML = DOC_ORDER.map((id) => {
+    const doc = DOCUMENTS[id];
+    const active = id === currentDocId ? " active" : "";
+    return `<button type="button" class="doc-switch-btn${active}" data-doc="${id}">${doc.label}<span class="doc-switch-sub">${doc.sections.length} sections</span></button>`;
+  }).join("");
+}
+
+function selectDocument(id) {
+  currentDocId = id;
+  const doc = DOCUMENTS[id];
+  CHUNKS = doc.sections.map((s) => s.text);
+
+  renderDocSwitcher();
+  docNameEl.textContent = doc.filename;
+  docMetaEl.textContent = doc.meta;
+  docPreviewBodyEl.innerHTML = doc.sections.map((s) => `<h4>${s.heading}</h4><p>${s.text}</p>`).join("");
+
+  // Reset step 1-2 state - this document hasn't been "processed" yet.
+  pipelineTrackEl.querySelectorAll(".pipeline-stage").forEach((el) => el.classList.remove("active", "done"));
+  pipelineSummaryEl.classList.remove("visible");
+  chunksGridEl.classList.remove("visible");
+  chunksGridEl.innerHTML = "";
+  processBtnEl.disabled = false;
+  processBtnEl.textContent = "Process this document →";
+
+  // Reset step 3-4 state, and swap in this document's own suggestions.
+  searchInputEl.value = "";
+  searchResultsEl.innerHTML = "";
+  chatInputEl.value = "";
+  answerBoxEl.classList.remove("visible");
+  searchChipsEl.innerHTML = doc.searchSuggestions.map((q) => `<button type="button" class="query-chip" data-q="${q}">${q}</button>`).join("");
+  chatChipsEl.innerHTML = doc.chatSuggestions.map((q) => `<button type="button" class="query-chip" data-q="${q}">${q}</button>`).join("");
+}
+
+docSwitcherEl.addEventListener("click", (event) => {
+  const btn = event.target.closest(".doc-switch-btn");
+  if (!btn) return;
+  selectDocument(btn.dataset.doc);
+});
 
 // ---------- Step 1: upload + pipeline animation ----------
 const processBtnEl = document.getElementById("process-btn");
@@ -415,6 +540,7 @@ processBtnEl.addEventListener("click", () => {
     const last = pipelineTrackEl.querySelector(`[data-stage="${STAGES[STAGES.length - 1]}"]`);
     last.classList.remove("active");
     last.classList.add("done");
+    pipelineSummaryEl.innerHTML = `<strong>Done.</strong> ${CHUNKS.length} chunks created (≈120 tokens each, 20-token overlap) · 384-dim embeddings (sample vectors, not computed by a real model) · stored in collection <code>demo-docs</code>.`;
     pipelineSummaryEl.classList.add("visible");
     renderChunks();
     processBtnEl.disabled = false;
@@ -423,17 +549,11 @@ processBtnEl.addEventListener("click", () => {
 });
 
 // ---------- Step 3: semantic search ----------
-const SEARCH_SUGGESTIONS = [
-  "how should a client handle a 429?",
-  "difference between 401 and 403",
-  "how do idempotency keys work?",
-];
 const searchChipsEl = document.getElementById("search-chips");
 const searchInputEl = document.getElementById("search-input");
 const searchBtnEl = document.getElementById("search-btn");
 const searchResultsEl = document.getElementById("search-results");
 
-searchChipsEl.innerHTML = SEARCH_SUGGESTIONS.map((q) => `<button type="button" class="query-chip" data-q="${q}">${q}</button>`).join("");
 searchChipsEl.addEventListener("click", (event) => {
   const chip = event.target.closest(".query-chip");
   if (!chip) return;
@@ -449,7 +569,7 @@ function runSearch() {
   }
   const results = scoreChunks(query).slice(0, 3);
   if (results.length === 0) {
-    searchResultsEl.innerHTML = `<div class="result-card"><p>No chunk in this sample document shares enough words with that query. Try one of the suggestions, or a question closer to rate limits, auth errors, idempotency, timeouts, or error format.</p></div>`;
+    searchResultsEl.innerHTML = `<div class="result-card"><p>No chunk in this sample document shares enough words with that query. Try one of the suggestions, or a question closer to ${DOCUMENTS[currentDocId].notFoundHint}.</p></div>`;
     return;
   }
   searchResultsEl.innerHTML = results
@@ -471,18 +591,12 @@ searchBtnEl.addEventListener("click", runSearch);
 searchInputEl.addEventListener("keydown", (e) => { if (e.key === "Enter") runSearch(); });
 
 // ---------- Step 4: ask the assistant ----------
-const CHAT_SUGGESTIONS = [
-  "what's the difference between 401 and 403?",
-  "what should a client do about timeouts?",
-  "what does every error response look like?",
-];
 const chatChipsEl = document.getElementById("chat-chips");
 const chatInputEl = document.getElementById("chat-input");
 const chatBtnEl = document.getElementById("chat-btn");
 const answerBoxEl = document.getElementById("answer-box");
 const answerTextEl = document.getElementById("answer-text");
 
-chatChipsEl.innerHTML = CHAT_SUGGESTIONS.map((q) => `<button type="button" class="query-chip" data-q="${q}">${q}</button>`).join("");
 chatChipsEl.addEventListener("click", (event) => {
   const chip = event.target.closest(".query-chip");
   if (!chip) return;
@@ -495,7 +609,7 @@ function runChat() {
   if (!query) return;
   const results = scoreChunks(query).slice(0, 2);
   if (results.length === 0) {
-    answerTextEl.innerHTML = `I couldn't find anything in this one-page sample document close enough to that question. In the real app, the assistant would say so explicitly rather than guessing - it only answers from what's actually indexed.`;
+    answerTextEl.innerHTML = `I couldn't find anything in this sample document close enough to that question. In the real app, the assistant would say so explicitly rather than guessing - it only answers from what's actually indexed.`;
     answerBoxEl.classList.add("visible");
     return;
   }
@@ -507,6 +621,9 @@ function runChat() {
 
 chatBtnEl.addEventListener("click", runChat);
 chatInputEl.addEventListener("keydown", (e) => { if (e.key === "Enter") runChat(); });
+
+// ---------- Init ----------
+selectDocument(currentDocId);
 </script>
 <script src="script.js"></script>
 </body>
