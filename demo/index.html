@@ -98,8 +98,8 @@
   }
   .doc-switch-btn .doc-switch-sub { display: block; font-weight: 400; color: var(--text-muted); font-size: 0.78rem; margin-top: 2px; }
   .doc-switch-btn:hover { border-color: var(--accent); }
-  .doc-switch-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-ink); }
-  .doc-switch-btn.active .doc-switch-sub { color: var(--accent-ink); opacity: 0.8; }
+  .doc-switch-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .doc-switch-btn.active .doc-switch-sub { color: var(--accent); opacity: 0.85; }
 
   .doc-chip {
     display: flex;
@@ -234,6 +234,11 @@
   .answer-box .answer-tag { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 8px; }
 
   .hidden { display: none !important; }
+
+  /* This page's footer has a single line, no footer-links - center it
+     instead of the shared stylesheet's space-between (meant for a second
+     element that isn't here). */
+  .site-footer .wrap { justify-content: center; text-align: center; }
 </style>
 </head>
 <body>
@@ -333,7 +338,7 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <span>Document Embedding Studio · static demo, sample data only</span>
+    <span>Document Embedding Studio · MIT license</span>
   </div>
 </footer>
 
