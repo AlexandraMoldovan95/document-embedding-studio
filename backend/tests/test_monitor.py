@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pytest
 from fastapi.testclient import TestClient
+from starlette.websockets import WebSocketDisconnect
 
 from app.api import monitor as monitor_module
 from app.services.docker_monitor import ContainerSnapshot, DockerUnavailable
@@ -45,3 +46,25 @@ def test_websocket_reports_docker_unavailable_cleanly(client: TestClient, monkey
     assert message["ok"] is False
     assert message["containers"] == []
     assert "Docker socket" in message["error"]
+
+
+def test_websocket_refuses_a_page_from_another_origin(client: TestClient, monkeypatch):
+    # A page on another site, open in the same browser: closed before accept, nothing sent.
+    calls = []
+    monkeypatch.setattr(monitor_module, "snapshot_containers", lambda: calls.append(1) or [])
+
+    with pytest.raises(WebSocketDisconnect) as closed:
+        with client.websocket_connect("/ws/containers", headers={"origin": "https://evil.example"}):
+            pass
+
+    assert closed.value.code == 1008
+    assert calls == []
+
+
+def test_websocket_accepts_the_app_frontend_origin(client: TestClient, monkeypatch):
+    monkeypatch.setattr(monitor_module, "snapshot_containers", lambda: [])
+
+    with client.websocket_connect("/ws/containers", headers={"origin": "http://localhost:3000"}) as ws:
+        message = ws.receive_json()
+
+    assert message["ok"] is True

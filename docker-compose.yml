@@ -4,7 +4,9 @@ services:
   backend:
     build: ./backend
     ports:
-      - "8000:8000"
+      # 127.0.0.1 only: the API (and the container panel behind it) is reachable
+      # from this computer, not from other devices on the same network.
+      - "127.0.0.1:8000:8000"
     environment:
       CORS_ORIGINS: http://localhost:3000
       CHROMA_DIR: /data/chroma
@@ -31,7 +33,7 @@ services:
       args:
         NEXT_PUBLIC_API_URL: http://localhost:8000
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       - backend
     labels:

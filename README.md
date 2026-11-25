@@ -77,7 +77,7 @@ backend/
     models/schemas.py       Pydantic request/response models
     core/config.py           settings from environment / .env
     core/errors.py           safe, typed domain errors
-  tests/                    70 tests: chunking, loaders, full API, chat, monitor
+  tests/                    72 tests: chunking, loaders, full API, chat, monitor
   pyproject.toml
   .env.example
   Dockerfile
@@ -163,7 +163,17 @@ CPU/memory for its own containers. This is a real privilege — anything with
 socket access can, in principle, control any container on the host, not
 just these two. Fine for a local, single-user setup like this one; not
 something to expose beyond your own machine. Full detail in
-`CONTAINER_MONITOR_FEATURE.md`.
+`CONTAINER_MONITOR_FEATURE.md`. Two guards keep it that way:
+
+- `docker-compose.yml` publishes both ports on `127.0.0.1` only, so other
+  devices on the same network can't reach the API or the panel.
+- `WS /ws/containers` refuses a connection whose `Origin` isn't one of
+  `CORS_ORIGINS` (CORS doesn't cover WebSockets), so another website open in
+  the same browser can't read the container list. Tested in
+  `backend/tests/test_monitor.py`.
+
+Not done yet: the backend container still runs as root (the `Dockerfile` has
+no `USER` line).
 
 To stop: `Ctrl+C` in that terminal, or `docker compose down` from another one.
 
@@ -270,7 +280,7 @@ Errors always arrive as `{ "success": false, "code": "...", "message": "..." }`.
 ```bash
 # Backend
 cd backend
-pytest                       # 70 tests — chunking, loaders, ingest/search/chat/monitor API
+pytest                       # 72 tests — chunking, loaders, ingest/search/chat/monitor API
 uvicorn app.main:app --reload
 
 # Frontend
