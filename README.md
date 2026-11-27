@@ -1,5 +1,9 @@
 # Document Embedding Studio
 
+![Document Embedding Studio, browser demo: a sample document run through extract, clean, chunk, embed and store, then split into overlapping chunks](docs/screenshot.jpg)
+
+_The [browser demo](#browser-demo-static-no-backend) (sample data, no backend): a document run through the pipeline and split into chunks._
+
 A local-first application for building the ingestion side of a **RAG
 (Retrieval-Augmented Generation)** system — the part that lets an AI answer
 questions using *your own documents* instead of only its general training
