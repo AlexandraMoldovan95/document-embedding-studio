@@ -574,9 +574,9 @@ main > .wrap, .tab-panel { padding-top: 0; }
 
 /* ---------- Footer ---------- */
 
-/* The footer: the name on one side, "Back to top" on the other, so a reader at the end of the
-   page doesn't scroll all the way up by hand. #top is <body>, not the sticky header: a link to a
-   sticky element doesn't scroll, because the browser sees it as already on screen. */
+/* The footer has "Back to top", so a reader at the end of the page doesn't scroll all the way up
+   by hand (index.html centres it under the name). #top is <body>, not the sticky header: a link
+   to a sticky element doesn't scroll, because the browser sees it as already on screen. */
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 24px 0 40px;

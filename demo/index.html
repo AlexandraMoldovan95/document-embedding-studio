@@ -237,10 +237,9 @@
 
   .hidden { display: none !important; }
 
-  /* This page's footer has a single line, no footer-links - center it
-     instead of the shared stylesheet's space-between (meant for a second
-     element that isn't here). */
-  .site-footer .wrap { justify-content: center; text-align: center; }
+  /* This page's footer, centred: the name, and "Back to top" under it,
+     instead of the shared stylesheet's space-between row. */
+  .site-footer .wrap { flex-direction: column; justify-content: center; text-align: center; }
 </style>
 </head>
 <body id="top">
