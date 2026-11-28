@@ -237,12 +237,13 @@
 
   .hidden { display: none !important; }
 
-  /* This page's footer, centred: the name, and "Back to top" under it,
-     instead of the shared stylesheet's space-between row. */
-  .site-footer .wrap { flex-direction: column; justify-content: center; text-align: center; }
+  /* This page's footer has a single line, no footer-links - center it
+     instead of the shared stylesheet's space-between (meant for a second
+     element that isn't here). */
+  .site-footer .wrap { justify-content: center; text-align: center; }
 </style>
 </head>
-<body id="top">
+<body>
 
 <header class="site-header">
   <div class="wrap">
@@ -341,9 +342,12 @@
 <footer class="site-footer">
   <div class="wrap">
     <span>Document Embedding Studio · MIT license</span>
-    <a href="#top" class="btn btn-ghost">↑ Back to top</a>
   </div>
 </footer>
+
+<button type="button" class="to-top" id="toTop" aria-label="Back to top" title="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
 <script>
 // ============================================

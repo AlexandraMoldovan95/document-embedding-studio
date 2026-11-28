@@ -100,3 +100,32 @@
     }, 2000);
   }
 })();
+
+// "Back to top": shown only on a page at least two screens tall, after half
+// a screen of scrolling (at the top, or on a short page, it would only be in
+// the way). Checked again on scroll, resize and any change in the page's
+// height (the demo grows once a document is processed). A click scrolls up
+// (instantly with reduced motion) and puts keyboard focus on the first link.
+(function () {
+  var btn = document.getElementById('toTop');
+  if (!btn) return;
+  function shouldShow(y, vh, ph) { return ph >= vh * 2 && y >= vh / 2; }
+  var queued = false;
+  function update() {
+    queued = false;
+    btn.classList.toggle('is-shown', shouldShow(window.scrollY, window.innerHeight, document.documentElement.scrollHeight));
+  }
+  function queue() {
+    if (!queued) { queued = true; window.requestAnimationFrame(update); }
+  }
+  window.addEventListener('scroll', queue, { passive: true });
+  window.addEventListener('resize', queue);
+  if ('ResizeObserver' in window) new ResizeObserver(queue).observe(document.body);
+  btn.addEventListener('click', function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    var first = document.querySelector('.header-actions a');
+    if (first) first.focus({ preventScroll: true });
+  });
+  update();
+})();
